@@ -29,19 +29,19 @@
 include_recipe 'kibana'
 
 # Kibana should run as the same user nginx runs as if not specified
-if node[:kibana][:user].empty?
-  if !node[:kibana][:webserver].empty?
-    webserver = node[:kibana][:webserver]
-    kibana_user = node[webserver][:user]
+if node['kibana']['user'].empty?
+  if !node['kibana']['webserver'].empty?
+    webserver = node['kibana']['webserver']
+    kibana_user = node[webserver]['user']
   else
     kibana_user = 'nobody'
   end
 else
-  kibana_user = node[:kibana][:user]
+  kibana_user = node['kibana']['user']
   kibana_user kibana_user do
     name kibana_user
     group kibana_user
-    home node[:kibana][:install_dir]
+    home node['kibana']['install_dir']
     action :create
   end
 end
@@ -50,8 +50,8 @@ end
 kibana_install 'kibana' do
   user kibana_user
   group kibana_user
-  install_dir node[:kibana][:install_dir]
-  install_type node[:kibana][:install_type]
+  install_dir node['kibana']['install_dir']
+  install_type node['kibana']['install_type']
   action :create
 end
 

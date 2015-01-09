@@ -32,6 +32,13 @@ config
 
 Creates config.js required by **Kibana**.
 
+It is recommended that this recipe run during the **Configure** stage in your
+**Layer**.
+
+**Example:**
+
+![OpsWorks Layer Configure](https://s3-us-west-1.amazonaws.com/opsworks-elk/opsworks_kibana--configure.png)
+
 License
 =======
 

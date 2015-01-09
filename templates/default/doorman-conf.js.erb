@@ -1,0 +1,36 @@
+module.exports = {
+  // Port to listen on
+  port: <%= node['kibana']['auth_proxy']['port'] %>,
+
+  <% if !node['kibana']['auth_proxy']['hostname'].empty? %>
+  // URL for OAuth callbacks, defaults to autodetect
+  hostname: "<%= node['kibana']['auth_proxy']['hostname'] %>",
+  <% end %>
+
+  proxyTo: {
+    host: "<%= node['kibana']['webserver_listen'] %>",
+    port: <%= node['kibana']['webserver_port'] %>
+  }
+
+  // Session cookie options, see: https://github.com/expressjs/cookie-session
+  sessionCookie: {
+    name: "<%= node['kibana']['auth_proxy']['session']['name'] %>",
+    maxage: <%= node['kibana']['auth_proxy']['session']['maxage'] %>,
+    secret: "<%= node['kibana']['auth_proxy']['session']['secret'] %>"
+  }
+
+  <% if !node['kibana']['auth_proxy']['public_paths'].empty? %>
+  // Paths that bypass doorman and do not need any authentication. Matches on
+  // the beginning of paths; for example '/about' matches '/about/me'. Regexes
+  // are also supported.
+  publicPaths: [
+    <% node['kibana']['auth_proxy']['public_paths'].each do |path| %>
+    <%= path %>
+    <% end %>
+  ],
+  <% end %>
+
+  modules: {
+    <%= @auth_modules %>
+  }
+}

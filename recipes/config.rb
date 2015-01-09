@@ -26,6 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+require 'json'
 include_recipe 'kibana'
 
 template "#{node['kibana']['install_dir']}/current/config.js" do
@@ -45,4 +46,18 @@ kibana_web 'kibana' do
   docroot "#{node['kibana']['install_dir']}/current"
   es_server node['kibana']['es_server']
   not_if { node['kibana']['webserver'] == '' }
+end
+
+# Generate doorman configuration when doorman is enabled
+if node['kibana']['authentication'] && !node['kibana']['auth_proxy'].empty?
+  template "#{node['kibana']['auth_proxy']['install_dir']}/conf.js" do
+    source 'doorman-conf.js.erb'
+    cookbook 'opsworks_kibana'
+    mode '0750'
+    user kibana_user
+    notifies :reload, 'service[nginx]'
+    variables(
+      auth_modules: node['kibana']['auth_proxy']['modules'].to_json
+    )
+  end
 end

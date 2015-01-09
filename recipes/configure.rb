@@ -47,17 +47,3 @@ kibana_web 'kibana' do
   es_server node['kibana']['es_server']
   not_if { node['kibana']['webserver'] == '' }
 end
-
-# Generate doorman configuration when doorman is enabled
-if node['kibana']['authentication'] && !node['kibana']['auth_proxy'].empty?
-  template "#{node['kibana']['auth_proxy']['install_dir']}/conf.js" do
-    source 'doorman-conf.js.erb'
-    cookbook 'opsworks_kibana'
-    mode '0750'
-    user kibana_user
-    notifies :reload, 'service[nginx]'
-    variables(
-      auth_modules: node['kibana']['auth_proxy']['modules'].to_json
-    )
-  end
-end

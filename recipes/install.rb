@@ -56,4 +56,18 @@ kibana_install 'kibana' do
 end
 
 # Host Kibana behind nginx proxy
+# See: https://github.com/lusis/chef-kibana/blob/569d020d2ddfad4fc6234d25d13eb8ad115172ab/recipes/nginx.rb
 include_recipe 'kibana::nginx'
+
+# Install Doorman OAuth proxy
+if node['kibana']['authentication'] && !node['kibana']['auth_proxy'].empty?
+  include_recipe 'git'
+  include_recipe 'nodejs'
+
+  git node['kibana']['auth_proxy']['install_dir'] do
+    repository node['kibana']['auth_proxy']['git']['url']
+    revision node['kibana']['auth_proxy']['git']['branch']
+    action node['kibana']['auth_proxy']['git']['type'].to_sym
+    user kibana_user
+  end
+end

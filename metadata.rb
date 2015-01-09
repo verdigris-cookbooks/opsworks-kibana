@@ -8,3 +8,4 @@ version          '0.1.0'
 
 depends 'kibana', '>=1.3.0'
 depends 'git', '~3.1.0'
+depends 'nodejs', '~2.2.0'

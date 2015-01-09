@@ -9,6 +9,7 @@ Requirements
 
 * **kibana** (≥ 1.3.0)
 * **git** (~ 3.1.0)
+* **nodejs** (~ 2.2.0)
 
 Recipes
 =======

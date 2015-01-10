@@ -1,8 +1,5 @@
 default['kibana']['install_path'] = '/var/www'
 
-# Disable authentication by default. Set to true to install doorman proxy
-default['kibana']['authentication'] = false
-
 # Doorman OAuth proxy configuration
 default['kibana']['auth_proxy']['install_dir'] = "#{node['kibana']['install_path']}/oauth"
 
@@ -18,3 +15,5 @@ default['kibana']['auth_proxy']['port'] = 8085
 default['kibana']['auth_proxy']['session']['name'] = "__kibana"             # cookie name
 default['kibana']['auth_proxy']['session']['maxage'] = 24 * 60 * 60 * 1000  # milliseconds
 default['kibana']['auth_proxy']['session']['secret'] = 'AeV8Thaieel0Oor6shainu6OUfoh3ohwZaemohC0Ahn3guowieth2eiCkohhohG4' # change this for security reasons
+
+default['kibana']['auth_proxy']['modules'] = {}

@@ -1,0 +1,41 @@
+# Kibana is served by a backend server. This controls which port to use.
+port: <%= @port %>
+
+# The host to bind the server to.
+host: "<%= @listen_address %>"
+
+# The Elasticsearch instance to user for all your queries
+elasticsearch: "<%= @elasticsearch %>"
+
+# Kibana uses and index in Elasticsearch to store saved searches, visualizations
+# and dashboard. It will create an new index if it doesn't already exist.
+kibana_index: "<%= @index %>"
+
+# The default application to laad.
+default_app_id: "<%= @default_app_id %>"
+
+# Time in seconds to wait for responses from the back end or elasticsearch.
+# Note this should always be higher than "shard_timeout".
+# This must be > 0
+request_timeout: <%= @request_timeout %>
+
+# Time in milliseconds for Elasticsearch to wait for responses from shards.
+# Note this should always be lower than "request_timeout".
+# Set to 0 to disable (not recommended)
+shard_timeout: <%= @shard_timeout %>
+
+# Set to false to have a complete disregard for the validity of the SSL
+# certificate.
+verify_ssl: <%= @verify_ssl %>
+
+# Plugins that are included in the build, and no longer found in the plugins/ folder
+bundledPluginIds:
+- plugins/dashboard/index
+- plugins/discover/index
+- plugins/doc/index
+- plugins/kibana/index
+- plugins/metric_vis/index
+- plugins/settings/index
+- plugins/table_vis/index
+- plugins/vis_types/index
+- plugins/visualize/index

@@ -44,6 +44,9 @@ kibana_install 'kibana' do
   action :create
 end
 
+kibana_config = "#{node['kibana']['install_dir']}/current/"\
+                "#{node['kibana'][install_type]['config']}"
+
 es_server = "#{node['kibana']['es_scheme']}#{node['kibana']['es_server']}:"\
             "#{node['kibana']['es_port']}"
 
@@ -55,17 +58,14 @@ template kibana_config do
   group kibana_user
   variables(
     port: node['kibana']['java_webserver_port'],
-    listen_address: node['kibana']['java_webserver_listen']
+    listen_address: node['kibana']['java_webserver_listen'],
     index: node['kibana']['config']['kibana_index'],
     elasticsearch: es_server,
     default_app_id: node['kibana']['config']['default_app_id'],
-    request_timeout: node['kibana']['config']['request_timeout']
+    request_timeout: node['kibana']['config']['request_timeout'],
     shard_timeout: node['kibana']['config']['shard_timeout']
   )
 end
-
-kibana_config = "#{node['kibana']['install_dir']}/current/"\
-                "#{node['kibana'][install_type]['config']}"
 
 if install_type == 'file'
 

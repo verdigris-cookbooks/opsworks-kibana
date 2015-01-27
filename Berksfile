@@ -2,4 +2,5 @@ source "https://supermarket.getchef.com"
 
 metadata
 
-cookbook 'chef-kibana'
+cookbook 'kibana_lwrp'
+cookbook 'java'

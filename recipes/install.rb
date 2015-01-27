@@ -26,35 +26,59 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-include_recipe 'kibana'
+install_type = node['kibana']['install_type']
 
-# Kibana should run as the same user nginx runs as if not specified
-if node['kibana']['user'].empty?
-  if !node['kibana']['webserver'].empty?
-    webserver = node['kibana']['webserver']
-    kibana_user = node[webserver]['user']
-  else
-    kibana_user = 'nobody'
-  end
-else
-  kibana_user = node['kibana']['user']
-  kibana_user kibana_user do
-    name kibana_user
-    group kibana_user
-    home node['kibana']['install_dir']
-    action :create
-  end
+kibana_user = node['kibana']['user']
+kibana_user kibana_user do
+  name kibana_user
+  group kibana_user
+  home node['kibana']['install_dir']
+  action :create
 end
 
-# Install Kibana
 kibana_install 'kibana' do
   user kibana_user
   group kibana_user
   install_dir node['kibana']['install_dir']
-  install_type node['kibana']['install_type']
+  install_type install_type
   action :create
 end
 
-# Host Kibana behind nginx proxy
-# See: https://github.com/lusis/chef-kibana/blob/569d020d2ddfad4fc6234d25d13eb8ad115172ab/recipes/nginx.rb
-include_recipe 'kibana::nginx'
+es_server = "#{node['kibana']['es_scheme']}#{node['kibana']['es_server']}:"\
+            "#{node['kibana']['es_port']}"
+
+template kibana_config do
+  source node['kibana'][install_type]['config_template']
+  cookbook node['kibana'][install_type]['config_template_cookbook']
+  mode '0644'
+  user kibana_user
+  group kibana_user
+  variables(
+    port: node['kibana']['java_webserver_port'],
+    listen_address: node['kibana']['java_webserver_listen']
+    index: node['kibana']['config']['kibana_index'],
+    elasticsearch: es_server,
+    default_app_id: node['kibana']['config']['default_app_id'],
+    request_timeout: node['kibana']['config']['request_timeout']
+    shard_timeout: node['kibana']['config']['shard_timeout']
+  )
+end
+
+kibana_config = "#{node['kibana']['install_dir']}/current/"\
+                "#{node['kibana'][install_type]['config']}"
+
+if install_type == 'file'
+
+  include_recipe 'java::default' if node['kibana']['install_java']
+  include_recipe 'runit::default'
+
+  runit_service 'kibana' do
+    options(
+      user: kibana_user,
+      home: "#{node['kibana']['install_dir']}/current"
+    )
+    cookbook 'kibana_lwrp'
+    subscribes :restart, "template[#{kibana_config}]", :delayed
+  end
+
+end

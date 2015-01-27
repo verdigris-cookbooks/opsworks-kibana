@@ -1,3 +1,9 @@
+default['kibana']['file']['config_template_cookbook'] = "kibana"
+
+# Kibana Java Web Server
+default['kibana']['java_webserver_listen'] = "0.0.0.0"
+
+# Parent directory of install_dir. This is required because of the `file` method.
 default['kibana']['install_path'] = '/var/www'
 
 # Doorman OAuth proxy configuration
@@ -17,3 +23,8 @@ default['kibana']['auth_proxy']['session']['maxage'] = 24 * 60 * 60 * 1000  # mi
 default['kibana']['auth_proxy']['session']['secret'] = 'AeV8Thaieel0Oor6shainu6OUfoh3ohwZaemohC0Ahn3guowieth2eiCkohhohG4' # change this for security reasons
 
 default['kibana']['auth_proxy']['modules'] = {}
+
+default['kibana']['config']['default_app_id'] = "discovery"
+default['kibana']['config']['request_timeout'] = "60"
+default['kibana']['config']['shard_timeout'] = "30000"
+default['kibana']['config']['verify_ssl'] = false

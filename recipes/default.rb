@@ -107,8 +107,8 @@ when 'file'
 end
 
 template kibana_config do
-  source node['kibana']['config_template']
-  cookbook node['kibana']['config_template_cookbook']
+  source node['kibana']['file']['config_template']
+  cookbook node['kibana']['file']['config_template_cookbook']
   mode '0644'
   user kibana_user
   group kibana_user

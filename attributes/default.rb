@@ -15,7 +15,7 @@ default['kibana']['file']['url'] = 'https://download.elasticsearch.org/kibana/'\
 default['kibana']['file']['checksum'] = nil # sha256 ( shasum -a 256 FILENAME )
 default['kibana']['file']['config'] = 'config/kibana.yml' # relative path of config file
 default['kibana']['file']['config_template'] = 'kibana.yml.erb' # template to use for config
-default['kibana']['file']['config_template_cookbook'] = 'kibana' # cookbook containing config template
+default['kibana']['file']['config_template_cookbook'] = 'opsworks_kibana' # cookbook containing config template
 
 # Kibana Java Web Server
 default['kibana']['java_webserver_listen'] = "0.0.0.0"

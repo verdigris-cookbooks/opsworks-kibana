@@ -6,6 +6,6 @@ description      'Installs and configures Kibana'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.1'
 
-depends 'kibana', '~> 1.4'
-depends 'java'
-depends 'nodejs', '~> 2.2'
+%w(git ark libarchive java runit).each do |cookbook|
+  depends cookbook
+end

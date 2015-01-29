@@ -26,9 +26,10 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+install_type = node['kibana']['install_type']
 kibana_user = node['kibana']['user']
 kibana_config = "#{node['kibana']['install_dir']}/current/"\
-                "#{node['kibana']['config_path']}"
+                "#{node['kibana'][install_type]['config']}"
 es_server = "#{node['kibana']['es_scheme']}#{node['kibana']['es_server']}:"\
             "#{node['kibana']['es_port']}"
 
@@ -52,7 +53,7 @@ directory node['kibana']['install_dir'] do
   mode '0755'
 end
 
-case node['kibana']['install_type']
+case install_type
 when 'git'
   include_recipe 'git::default'
 

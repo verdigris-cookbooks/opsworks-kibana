@@ -5,7 +5,7 @@ default['kibana']['version'] = '4.0.0-beta3'
 default['kibana']['git']['url'] = 'https://github.com/elasticsearch/kibana.git'
 default['kibana']['git']['branch'] = '8faae21'
 default['kibana']['git']['action'] = 'sync'
-default['kibana']['git']['config_path'] = 'src/server/config/kibana.yml'
+default['kibana']['git']['config'] = 'src/server/config/kibana.yml'
 default['kibana']['git']['config_template'] = 'kibana.yml.erb'
 default['kibana']['git']['config_template_cookbook'] = "opsworks_kibana"
 
